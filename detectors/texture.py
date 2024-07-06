@@ -1,5 +1,6 @@
 import cv2
 from skimage.feature import local_binary_pattern
+import numpy as np
 
 def measure_skin_texture(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

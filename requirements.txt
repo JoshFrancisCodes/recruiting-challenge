@@ -2,3 +2,4 @@ fastapi
 pillow
 imutils
 dlib
+deepface

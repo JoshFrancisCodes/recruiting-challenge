@@ -15,6 +15,25 @@ def get_landmarks(image):
     return None
 
 def draw_landmarks(image, landmarks):
-    for (x, y) in landmarks:
-        cv2.circle(image, (x, y), 1, (0, 255, 0), -1)
+    height, width = image.shape[:2]
+    radius = max(1, int(min(width, height) * 0.005))
+    font_scale = radius * 0.3  # Font scale proportional to radius
+    thickness = max(1, int(radius * 0.5))  # Thickness proportional to radius
+
+    for i, (x, y) in enumerate(landmarks):
+        cv2.circle(image, (x, y), radius, (0, 255, 0), -1)
+        cv2.putText(image, str(i), (x + radius, y - radius), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), thickness)
+    
     return image
+
+def extract_shapes(landmarks):
+    shapes = {
+        'left_eyebrow': landmarks[17:22],
+        'right_eyebrow': landmarks[22:27],
+        'left_eye': landmarks[36:42],
+        'right_eye': landmarks[42:48],
+        'nose': landmarks[27:36],
+        'mouth': landmarks[48:],
+        'jaw': landmarks[0:17]
+    }
+    return shapes

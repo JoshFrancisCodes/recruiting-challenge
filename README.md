@@ -1,72 +1,100 @@
-# IdentifAI Recruiting Challenge
-
-Objective: Develop a FastAPI application that allows users to upload an image and generates a "facial profile" that describes key characteristics of the face which define its reality.
-Timeframe: You have until June 29th! Just let us know when you start so we can keep track. The project in total shouldn't take longer than 3 days, however we understand some may have busy schedules!
-
-Tasks:
-1. Setup FastAPI Server: Develop a basic FastAPI server to handle image uploads.
-2. Facial Analysis: Implement a method (or use a library) to analyze facial features from the uploaded image.
-3. API Endpoint: Create an endpoint that receives an image, processes it to extract facial features, and saves a "profile" of these features.
-4. Create a use case showing how this "facial profile" could be used to identify a separate image as real.
-
-
-## What we are looking for:
-
-1. Well structured code
-2. A Creative Solution that shows an understanding of the problem
-3. Documentation supporting why you made the decisions you made!
-
-## Bonus Points
-1. Additional API endpoints that support the detection aspect (using the profile)
-2. Deep documentation on how to use the API using the FastAPI docs
-3. Highly creative profile creation
-
-# Facial Profile Creator Project Skeleton Code
+# Josh's IdentifAI Recruiting Challenge
 
 ## Development Setup
-- Python 3.8+
-- FastAPI
-- Libraries for image processing and facial analysis (e.g., OpenCV, dlib)
+
+- **Python 3.9+**
+- **FastAPI**
+- Libraries for image processing and facial analysis: OpenCV, dlib, scipy, fastdtw
 
 ## Installation
+
 1. Clone the repository:
-```git clone https://github.com/Identif-AI/recruiting-challenge.git ```
+    ```sh
+    git clone https://github.com/JoshFrancisCodes/recruiting-challenge.git
+    ```
+
 2. Install dependencies:
-``` pip install -r requirements.txt ```
+    ```sh
+    pip install -r requirements.txt
+    ```
+
 3. Run the server locally:
-``` uvicorn app.main --reload```
+    ```sh
+    uvicorn app.main:app --reload
+    ```
 
 ## Usage
-- Navigate to `http://127.0.0.1:8000/docs` to see the API documentation and interact with the API.
 
+Navigate to `http://127.0.0.1:8000/docs` to see the API documentation and interact with the API.
 
-## Skeleton Code
+## API Endpoints
 
+### Create Profile
+```http
+POST /create-profile
 ```
-from fastapi import FastAPI, File, UploadFile
-from pydantic import BaseModel
-from io import BytesIO
-from PIL import Image
+Upload an image to create a new profile. The profile will contain facial feature information and embeddings.
+- **Response Model**: `Profile`
 
-app = FastAPI()
-
-class Profile(BaseModel):
-    description: str
-
-@app.post("/create-profile", response_model=Profile)
-async def create_profile(file: UploadFile = File(...)):
-    img = Image.open(BytesIO(await file.read()))
-    # Placeholder for facial analysis
-    profile_description = analyze_face(img)
-    return {"description": profile_description}
-
-def analyze_face(image):
-    # Implement facial analysis logic or use a model/library
-    # Example: "Face with high cheekbones, oval shape, and light brown eyes."
-    return "Example facial profile based on analysis."
-
-
+### Get Profile
+```http
+POST /get-profile
 ```
+Upload an image to retrieve a profile. The profile will contain facial feature information and embeddings.
+- **Response Model**: `Profile`
 
+### Find Closest Profile
+```http
+POST /find-closest-profile
+```
+Upload an image and specify a facial feature (e.g., 'eyebrow', 'nose') to find the closest matching profile based on the shape similarity of that feature.
+- **Query Parameter**: `feature` (Facial feature to compare)
+- **Response Model**: `ProfileMatch`
 
+### Measure Artifacts
+```http
+POST /measure-artifacts
+```
+Upload an image to measure various artifacts such as lighting inconsistency, blur, asymmetry, texture score, high-frequency artifacts, and gaze direction.
+- **Response Model**: `Artifacts`
 
+### Show Landmarks
+```http
+POST /show-landmarks
+```
+Upload an image to display the facial landmarks overlaid on the original image.
+- **Response**: Image with landmarks
+
+## Detailed Examples and Documentation
+
+- **Profile Model Example**:
+    ```json
+    {
+        "id": 1,
+        "description": "Face with high cheekbones, square shape, and blue eyes.",
+        "embedding": [0.1, 0.2, 0.3],
+        "artifacts": {
+            "lighting_inconsistency": 0.1,
+            "blur_measure": 0.2,
+            "asymmetry_score": 0.3,
+            "texture_score": 0.4,
+            "high_freq_artifacts": 0.5,
+            "gaze_direction": 0.6
+        },
+        "landmarks": [[0, 0], [1, 1], [2, 2]]
+    }
+    ```
+
+- **Artifacts Model Example**:
+    ```json
+    {
+      "lighting_inconsistency": 0.1,
+      "blur_measure": 0.2,
+      "asymmetry_score": 0.3,
+      "texture_score": 0.4,
+      "high_freq_artifacts": 0.5,
+      "gaze_direction": 0.6
+    }
+    ```
+
+---

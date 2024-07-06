@@ -1,5 +1,9 @@
 # Josh's IdentifAI Recruiting Challenge
 
+## Overall Approach
+
+In this project I focused on extracting as much uniquely identifiable information about a face as possible. I recalled Justin saying something about how IdentifAI is trying to look at data on what makes an image real, instead of looking at what makes an image fake, so I avoided spending too much time on DeepFake detection. Instead, I largely looked at the landmark data from dlib's landmark model and then applied computer vision algorithms on relevant parts of the image to get data about things like the shape of the eyebrow, or the width of the jaw. I tried to make all measurements relative when possible so that they could be meaningfully compared across images of different sizes and with faces in different parts of the image. Finally, I added some computer vision algorithms to look for artifacts in the image data that are found in high amounts in DeepFaked images, such as weird blurring and high frequency noise. All of this data let me produce detailed face profiles, which I then create API calls to manage, such as matching API calls and search/query calls.
+
 ## Development Setup
 
 - **Python 3.9+**
